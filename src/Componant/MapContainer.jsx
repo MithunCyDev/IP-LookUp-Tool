@@ -1,13 +1,15 @@
 // MapContainer.jsx
 import React from 'react';
-import { MapContainer as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer as LeafletMap, TileLayer, Marker } from 'react-leaflet';
 
 
 const MapContainer = ({latitude, longitude}) => {
   const center = {
-    lat: latitude, // Example latitude
-    lng: longitude, // Example longitude
+    lat: latitude, 
+    lng: longitude, 
   };
+
+  
   return (
     <LeafletMap center={center} zoom={15} style={{ width: '100%', height: '100%' }}>
       <TileLayer

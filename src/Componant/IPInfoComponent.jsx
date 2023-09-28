@@ -3,7 +3,7 @@ import logo from "../assets/Logo.png";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 
-function IPInfoComponent({ userInput }, {onChildData}) {
+function IPInfoComponent({ userInput }, onChildData) {
   const [ipInfo, setIpInfo] = useState(null);
   const [lodding, setLodding] = useState(true);
 
@@ -24,7 +24,7 @@ function IPInfoComponent({ userInput }, {onChildData}) {
         .then((response) => response.json())
         .then((data) => {
           setIpInfo(data);
-    
+          // onChildData(data);
         })
         .catch((error) =>
           console.error("Error fetching IP information:", error)
@@ -39,11 +39,6 @@ function IPInfoComponent({ userInput }, {onChildData}) {
       setLodding(false);
     }, 3000);
   }, []);
-
-
-  const sendDataToParent = () => {
-    onChildData(ipInfo);
-  };
 
 
   

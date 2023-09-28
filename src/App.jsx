@@ -10,8 +10,6 @@ function App() {
   const [childData, setChildData] = useState(null);
 
   useEffect(() => {
-    // Simulate fetching latitude and longitude from user's IP
-    // Replace this with actual code to fetch latitude and longitude from IP
     setTimeout(() => {
       setLatitude(24.3412);
       setLongitude(90.7642);
@@ -20,9 +18,9 @@ function App() {
 
   const handleChildData = (data) => {
     setChildData(data);
+    console.log(data, "child")
   };
 
-  console.log(childData, "child")
   return (
     <>
       <section className=" bg-pureBlack">
@@ -37,7 +35,7 @@ function App() {
                 onChange={(e) => setIP(e.target.value)}
               />
             </div>
-            <IPInfoComponent userInput={ip} onChildData={handleChildData} />
+            <IPInfoComponent userInput={ip} onChildData={handleChildData}  />
           </div>
           {/* Google Map */}
           <div className=" bg-pureBlack">
