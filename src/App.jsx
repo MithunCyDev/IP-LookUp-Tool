@@ -5,21 +5,53 @@ import MapContainer from "./Componant/MapContainer";
 
 function App() {
   const [ip, setIP] = useState(null);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [childData, setChildData] = useState(null);
+  const [livelocationmsg, setLivelocationmsg] = useState(false);
+  const [live, setLive] = useState(null);
 
   useEffect(() => {
     setTimeout(() => {
-      setLatitude(24.3412);
-      setLongitude(90.7642);
-    }, 2000);
+      setLivelocationmsg(false);
+    }, 4000);
   }, []);
 
-  const handleChildData = (data) => {
-    setChildData(data);
-    console.log(data, "child")
-  };
+  useEffect(() => {
+    // User Live Location
+    if (navigator.geolocation !== null) {
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    } else {
+      setLivelocationmsg("Geolocation is not supported by this browser.");
+    }
+
+    function successCallback(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      // Use the latitude and longitude data
+      if (latitude !== null && longitude !== null) {
+        setLive({ latitude, longitude });
+      }
+    }
+
+    function errorCallback(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          setLivelocationmsg("User denied the request for live location.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          setLivelocationmsg("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          setLivelocationmsg("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          setLivelocationmsg("An unknown error occurred.");
+          break;
+      }
+    }
+  }, [navigator.geolocation]);
+
+  useEffect(() => {
+    localStorage.setItem("LiveLocation", JSON.stringify(live));
+  }, [live]);
 
   return (
     <>
@@ -27,6 +59,17 @@ function App() {
         <div className="grid lg:grid-cols-2 lg:grid-rows-1 xs:grid-rows-2 xs:h-full w-full lg:h-screen lg:pt-0 xs:pt-16">
           {/* IP Information */}
           <div className="grid place-content-center pb-6">
+            {/* Live Location warning */}
+            <h1
+              className={
+                livelocationmsg
+                  ? `mx-auto text-red font-medium bg-black py-2 px-4 mb-4 border border-red`
+                  : "hidden"
+              }
+            >
+              {livelocationmsg}
+            </h1>
+
             <div className="mb-5">
               <input
                 type="text"
@@ -35,15 +78,12 @@ function App() {
                 onChange={(e) => setIP(e.target.value)}
               />
             </div>
-            <IPInfoComponent userInput={ip} onChildData={handleChildData}  />
+            <IPInfoComponent userInput={ip} />
           </div>
           {/* Google Map */}
           <div className=" bg-pureBlack">
-            {latitude && longitude && (
-              <MapContainer latitude={latitude} longitude={longitude} />
-            )}
+            <MapContainer />
           </div>
-          
         </div>
       </section>
     </>

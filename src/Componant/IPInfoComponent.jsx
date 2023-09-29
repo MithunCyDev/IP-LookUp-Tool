@@ -2,19 +2,25 @@ import React, { useEffect, useState } from "react";
 import logo from "../assets/Logo.png";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
-
-function IPInfoComponent({ userInput }, onChildData) {
+function IPInfoComponent({ userInput }) {
   const [ipInfo, setIpInfo] = useState(null);
   const [lodding, setLodding] = useState(true);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLodding(false);
+    }, 3000);
+  }, []);
 
   useEffect(() => {
     function getIPInfo() {
       fetch("https://api.ipify.org/?format=json")
         .then((response) => response.json())
         .then((data) => {
-          const ipToUse = userInput || data.ip;
-          ipInfoFunc(ipToUse);
+          if (data !== undefined || userInput !== null) {
+            const ipToUse = userInput || data.ip;
+            ipInfoFunc(ipToUse);
+          }
         })
         .catch((error) => console.error("Error:", error));
     }
@@ -24,7 +30,7 @@ function IPInfoComponent({ userInput }, onChildData) {
         .then((response) => response.json())
         .then((data) => {
           setIpInfo(data);
-          // onChildData(data);
+          localStorage.setItem("Data", JSON.stringify(data));
         })
         .catch((error) =>
           console.error("Error fetching IP information:", error)
@@ -33,15 +39,6 @@ function IPInfoComponent({ userInput }, onChildData) {
 
     getIPInfo();
   }, [userInput]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLodding(false);
-    }, 3000);
-  }, []);
-
-
-  
 
   return (
     <div className="py-6 px-8 bg-black min-w-[340px] min-h-[450px] relative">
@@ -58,9 +55,7 @@ function IPInfoComponent({ userInput }, onChildData) {
       )}
 
       {lodding ? (
-        <ScaleLoader
-        className="absolute top-64 left-36"
-        color="#25b102"/>
+        <ScaleLoader className="absolute top-64 left-36" color="#25b102" />
       ) : (
         <div>
           {ipInfo && (
@@ -124,7 +119,6 @@ function IPInfoComponent({ userInput }, onChildData) {
           )}
         </div>
       )}
-
     </div>
   );
 }
