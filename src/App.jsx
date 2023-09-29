@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLivelocationmsg(false);
-    }, 4000);
+    }, 5000);
   }, []);
 
   useEffect(() => {

@@ -34,7 +34,9 @@ const MapContainer = () => {
   return (
     <>
       {lodding ? (
-        <h1>Looding...</h1>
+        <div className="grid place-content-center w-full h-screen">
+          <h1 className="text-green text-lg">Looding...</h1>
+        </div>
       ) : (
         <LeafletMap
           className={lodding ? "hidden" : "block"}

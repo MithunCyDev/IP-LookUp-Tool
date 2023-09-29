@@ -117,6 +117,11 @@ function IPInfoComponent({ userInput }) {
                 : "Your IP address is dedicated or real"}
             </div>
           )}
+          <div className="grid place-content-center mt-4">
+            <h1 className="text-gray opacity-20">
+              Developed by <a href="https://github.com/Mithuncy01" className="text-green opacity-50">Mithun cy</a>
+            </h1>
+          </div>
         </div>
       )}
     </div>
